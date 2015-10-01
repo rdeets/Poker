@@ -1,0 +1,315 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.io.*;
+public class Main{
+   //Class variables
+   private static Scanner input = new Scanner(System.in);//Scanner to handle user inputs
+   private static boolean logged = false;//User logged in
+   private static Account act = null;//Account
+   
+   
+   public static void main(String[] args) throws IOException{
+      //Variables
+      boolean ext = false;//User is exiting game
+      String option;//Users selection from menu
+      //Menus
+      String[] loggedMenu = {"New Game", "Settings", "Stats", "Logout", "Exit"};
+      String[] unloggedMenu = {"New Account", "Login", "Settings", "Exit"};
+      String[] settingsMenu = {"Complete"};
+      
+      //Intro
+      System.out.println("POKER");
+      
+      //Menu loop
+      while(ext == false){
+      
+         //Check if logged in
+         if (logged == false)
+            option = menu(unloggedMenu);
+         else
+            option = menu(loggedMenu);
+            
+         //Choose players option  
+         switch(option){
+         
+               case "New Account":
+               {
+                  //Get username and password
+                  input.nextLine();
+                  System.out.println("Enter Username(No Numbers): \n> ");
+                  String usr = input.nextLine();//Make sure theres no numbers
+                  System.out.println("Enter Password(No letters): \n> ");
+                  String pwd = input.nextLine();
+                  newAccount(usr, pwd);
+                  break;
+               }
+               
+               case "New Game": System.out.println("new game\n");
+                  break;
+                  
+               case "Login":
+               {  
+                  //Get username and password
+                  input.nextLine();
+                  System.out.println("Enter Username: \n> ");
+                  String usr = input.nextLine();//Make sure theres no numbers
+                  System.out.println("Enter Password: \n> ");
+                  String pwd = input.nextLine();
+                  login(usr, pwd);
+                  break;
+               }
+               
+               case "Stats": act.getStats();
+                  break;
+                  
+               case "Settings": System.out.println("setin\n");//game.stats();
+                  break;
+                  
+               case "Logout": logout();
+                  break;
+                  
+               case "Exit":
+               { 
+                  if (logged)
+                     logout();
+                  ext = true;
+                  break;
+               }
+               
+               default: System.out.println("Invalid input\n");
+         }
+      }
+   }
+   
+   
+   static boolean valid(String inpt, String type, int bound){
+      return true;
+   }
+   
+   
+   static void newAccount(String usr, String pwd) throws IOException{
+      //Variables
+      boolean found = false;//Check if already a username
+   
+      //Initialize scanner and writer
+      Scanner scan = new Scanner(new FileReader("Data.txt"));
+      File file = new File("data.txt");//Create file variable
+      
+      //Check if file already exists
+      if (!file.exists()) {
+         System.out.println("Creating new save file..");
+	      file.createNewFile();
+	   }
+      
+      //Check if already a username
+      BufferedReader br = new BufferedReader(new FileReader(file));//Create file reader
+      String thisLine;//current line being read
+      while ((thisLine = br.readLine()) != null){
+         //Check each line in file
+         if (thisLine.trim().replaceAll("\\s+", " ").equalsIgnoreCase(usr.trim().replaceAll("\\s+", " "))){
+            //username found
+            found = true;
+         }
+      }
+      
+      if (found){
+         System.out.println("Username taken");
+      }
+      else{
+         //Create new account
+         String[] tempList = {usr, pwd, "1000" ,"0" ,"0" ,"0", "0"};//New account stats
+         act = new Account(tempList);//Create new account
+         logged = true;//Logged in
+         System.out.println("Account created");
+      }
+      br.close();
+   }
+   
+   static void logout() throws IOException {
+      //Variables
+      boolean found = false;
+      String[] tempList = act.save();//User file info
+      
+      File file = new File("data.txt");//Create file
+      
+      //Check if file already exists
+      if (!file.exists()) {
+         System.out.println("Creating new save file..");
+	      file.createNewFile();
+	   }
+      
+      BufferedReader br = new BufferedReader(new FileReader(file));//Create file reader
+	   BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));//Create file writer
+      String thisLine;//current line being read
+      boolean done = false;
+      while ((thisLine = br.readLine()) != null){//Read each line in file
+         //bw.write(thisLine + "\n");//Rewrite line
+         if (thisLine.trim().replaceAll("\\s+", " ").equalsIgnoreCase(tempList[0].trim().replaceAll("\\s+", " "))){
+            //Username found
+            found = true;
+         }
+      }
+      if (!found){
+         while ((thisLine = br.readLine()) != null){//Read each line in file
+            bw.write(thisLine + "\n");//Rewrite line
+         }
+         bw.write(tempList[0] + "\n");
+         bw.write(tempList[1] + "\n");
+         bw.write(tempList[2] + "\n");
+         bw.write(tempList[3] + "\n");
+         bw.write(tempList[4] + "\n");
+         bw.write(tempList[5] + "\n");
+         bw.write(tempList[6] + "\n");
+      }
+      bw.close();
+      br.close();
+      logged = false;
+   }
+   
+   static void login(String usr, String pwd) throws IOException{
+      //Variables
+      int index = 0;
+      boolean found = false;
+      String[] tempList = new String[7];//User file info
+      
+      File file = new File("data.txt");//Create file
+      
+      //Check if file already exists
+      if (!file.exists()) {
+         System.out.println("Creating new save file..");
+	      file.createNewFile();
+	   }
+      
+      BufferedReader br = new BufferedReader(new FileReader(file));//Create file reader
+      String thisLine;//current line being read
+      while ((thisLine = br.readLine()) != null){//Read each line in file
+         index ++; 
+         if (thisLine.trim().replaceAll("\\s+", " ").equalsIgnoreCase(usr.trim().replaceAll("\\s+", " "))){
+            //Username found
+            tempList[0] = thisLine;//Save username
+            found = true;
+            thisLine = br.readLine();
+            if (thisLine.trim().replaceAll("\\s+", " ").equalsIgnoreCase(pwd.trim().replaceAll("\\s+", " "))){
+               //Valid login
+               tempList[1] = thisLine;//Save password
+               //Read user info from file
+               tempList[2] = br.readLine();
+               tempList[3] = br.readLine();
+               tempList[4] = br.readLine();
+               tempList[5] = br.readLine();
+               tempList[6] = br.readLine();
+               //Account recieves info
+               act = new Account(tempList);         
+               logged = true;//logged in
+            }
+         }
+      }
+      if (found){
+         if (logged){
+            System.out.println("Login Successful");
+         }
+         else{
+            System.out.println("Invalid Password");
+         }
+      }
+      else{
+         System.out.println("Account not found");
+      }
+      br.close();
+   }
+   
+     
+   public static String menu(String[] list){
+   //Creates a menu and handles user choice
+
+      while (true){
+         //Variables
+         int optn;
+         
+         //Print Menu
+         System.out.println("\nMENU\n");
+         for(int j = 0; j < list.length; j++)
+            System.out.println((j+1) + ") " + list[j]);
+         System.out.println("> ");
+         
+         //Handle invalid inputs
+         try{
+            if (input.hasNextInt()){
+               optn = input.nextInt();
+               
+               //Make sure number is within list
+               if (optn <= list.length){
+                  //input.close();
+                  return list[optn-1];
+               }
+                  
+               else
+                  System.out.println("Invalid number\n");
+            }
+            
+            //Input is non-Integer
+            else{
+               String fail = input.nextLine();
+               throw new Exception("Bad input. "+ fail + " is not an integer.  You must input an integer");
+            }
+         }
+         catch (Exception e)
+         {        System.out.println(e.getMessage());      }
+      }
+   }
+   
+   static void file(boolean in, Account act) throws IOException{
+      //File handling method
+      //Variables
+      boolean found = false;
+      int index = 0;
+      String [] info = new String[7];
+      Scanner scan = new Scanner(new FileReader("Data"));
+      
+      //Info going to text file
+      if (in){
+         info = act.save();
+         //Check if account been previosuly saved
+         while(scan.hasNext()){
+            index++;
+            if (act.getacctName().equals(scan.nextLine())){
+               found = true;
+               break;
+            }
+         }
+         
+         if (found){
+            //Save over previous
+         }
+         
+         else{
+            //Create new save space at end of file
+            //Find end of file!!!
+            PrintWriter writer = new PrintWriter("Data");
+            for(String x: info)
+               writer.println(x);
+            writer.close();
+         }
+      }
+      
+      //Info going out of text file
+      else{
+         //Find userName
+         while(scan.hasNext()){
+            index++;
+           if (act.getacctName().equals(scan.nextLine())){
+            found = true;
+            break;
+           }
+         }
+         if(found){
+            System.out.println("Found");
+            //Get Info
+         }
+         else{
+            System.out.println("Fd");
+            //If not in data!!!
+         }
+      }
+   }
+}
