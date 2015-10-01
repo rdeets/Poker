@@ -1,0 +1,36 @@
+public class Card{
+   //card constants
+   private String suit;
+   private String face = "";
+   private int value;
+   
+   public Card(String s, int v){
+      //card contructor
+      suit = s;
+      value = v;
+   }
+         
+   public String getSuit(){
+      return suit;
+   }
+   
+   public int getValue(){
+      return value;
+   }
+   
+   public void setSuit(String s){
+      suit = s;
+   }
+   
+   public void setValue(int v){
+      value = v;
+   }
+   
+   public String getFace(){
+      return face;
+   }
+   
+   public void setFace(String f){
+      face = f;
+   }
+}
