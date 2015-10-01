@@ -1,0 +1,63 @@
+public class Account{
+   //Variables
+   private String[] info = new String[7];
+   private final String acctName;
+   private String password;
+   private int money;
+   private int wins;
+   private int loses;
+   private int draws;
+   private int totalEarns;
+   
+   public Account(String[] inf){
+      //Account contructor
+      //Load information
+      acctName = inf[0];
+      password = inf[1];
+      money = Integer.parseInt(inf[2]);
+      wins = Integer.parseInt(inf[3]);
+      loses = Integer.parseInt(inf[4]);
+      draws = Integer.parseInt(inf[5]);
+      totalEarns = Integer.parseInt(inf[6]);
+      }
+   
+   public void setPassword(String x){
+      password = x;
+   }
+   
+   public void getStats(){
+      System.out.println(acctName);
+      System.out.println("-------");
+      System.out.println("Money: " + money);
+      System.out.println("Wins: " + wins);
+      System.out.println("Loses: " + loses);
+      System.out.println("Total Earnings: " + totalEarns);
+   }
+   
+   public String getacctName(){
+      return acctName;
+   }
+   
+   public void setWinLose(int x){
+   if(x == -1)
+      loses += 1;
+   else
+      wins += 1;
+   }
+   
+   public void setMoney(int x){
+      money += x;
+      if (x > 0)
+         totalEarns += x;
+   }
+      
+   public String[] save(){
+      String a = "" + money;
+      String b = "" + wins;
+      String c = "" + loses;
+      String d = "" + draws;
+      String f = "" + totalEarns;
+      String[] tempList = {acctName, password, a, b, c, d, f};
+      return tempList;
+   }
+}
