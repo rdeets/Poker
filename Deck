@@ -1,0 +1,61 @@
+import java.util.ArrayList;
+import java.util.Random;
+public class Deck{
+   private ArrayList<Card> pile = new ArrayList<Card>();
+   private ArrayList<Card> removedPile = new ArrayList<Card>();
+   
+   public Deck(){
+      //deck contructor
+      String[] suits = {"!", "@", "#", "$"};
+      String[] faces = {"Jack", "Queen", "King"};
+      int ref = 0;
+      
+      //Create cards
+      for (String f: suits){
+         for (int n = 2; n <= 10; n++){
+            pile.add(new Card(f, n));
+            ref++;
+            }
+         
+         for (String y: faces){
+            pile.add(new Card(f, 10));
+            pile.get(ref).setFace(y);
+            ref++;
+            }
+         //Aces   
+         pile.add(new Card(f, 11));
+         pile.get(ref).setFace("Ace");
+         ref++;
+      }     
+   }
+   
+   
+   public void shuffle(){
+      for (int j = 0; j < 100; j++){
+         ind1 = random.nextInt(pile.length());
+         ind2 = random.nextInt(pile.length());
+         Card tempCard = pile.get(ind2)
+         pile.set(ind1, ind2);
+         pile.add(ind1, tempCard);
+      }
+   }
+   
+   public Card drawCard(){
+      Card tempCard = pile.get(0);
+      pile.remove(0);
+      removedPile.add(tempCard);
+      return tempCard;
+   }
+   
+   public void returnCards(){
+      for (Card x: removedPile)
+         pile.add(x);
+      for (Card x: removedPile)
+         removedPile.remove(0);
+   }
+   
+   public void showDeck(){
+      for(Card x: pile)
+         System.out.println(x.getFace() + " " + x.getSuit() + " " + x.getValue()); 
+   }
+}
