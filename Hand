@@ -1,0 +1,33 @@
+import java.util.ArrayList;
+public class Hand{
+   //Variables
+   private ArrayList<Card> cards = new ArrayList<Card>();
+   
+   public Hand(boolean AI){
+      //Hand contructor
+      //Handle full game
+   }
+   
+   public void viewHand(){
+   
+   }
+   
+   public void raise(){
+   
+   }
+   
+   public void call(){
+   
+   }
+   
+   public void check(){
+   
+   }
+   
+   public void fold(){
+   
+   }
+   
+   public void turn(){
+   
+   }
