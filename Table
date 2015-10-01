@@ -1,0 +1,45 @@
+import java.util.ArrayList;
+public class Table{
+   //Variables
+   //boolean playerWin
+   ArrayList<Hand> players = new ArrayList<Hand>;
+   int pot;
+   
+   public Table(int numPlayers){
+      //table contructor
+      Deck cards = new Deck();
+      pot = 0;
+      deal();
+      //Intro
+   }
+   
+   public void viewTable(){
+   
+   }
+   
+   public void deal(){
+      for (Hand player: players){
+         if (player != null){
+            
+            
+         }
+      }
+   }
+   
+   public void setBets(){
+   
+   }
+   
+   public void checkWin(){
+   
+   }
+   
+   public void giveBet(){
+   
+   }
+   
+   public void changeStats(boolean win, int chips){
+   
+   }
+}
+      
